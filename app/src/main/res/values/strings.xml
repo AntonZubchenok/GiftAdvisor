@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Gift Advisor</string>
+
+    <!--MainActivity-->
+    <string-array name="holidays">
+        <item>День рождения</item>
+        <item>Новый год</item>
+        <item>Свадьба</item>
+        <item>8 марта</item>
+        <item>23 февраля</item>
+        <item>День Святого Валнтина</item>
+        <item>Без повода</item>
+    </string-array>
+    <string name="reason">Повод:</string>
+    <string name="sex">Пол:</string>
+    <string name="age">Возраст:</string>
+    <string name="price">Стоимость:</string>
+    <string name="under">до</string>
+    <string name="BYN">BYN</string>
+    <string name="find">Подобрать</string>
 </resources>
