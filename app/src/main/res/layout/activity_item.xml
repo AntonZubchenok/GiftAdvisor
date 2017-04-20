@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_item"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zubchenok.giftadvisor.activity.ItemActivity">
+
+    <ImageView
+        android:id="@+id/image_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentTop="true"
+        android:elevation="6dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/book"/>
+
+    <TextView
+        android:id="@+id/text_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/image_item_image"
+        android:layout_margin="16dp"
+        tools:text="Название подарка"
+        />
+
+    <TextView
+        android:id="@+id/text_sex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/text_item_name"
+        android:layout_margin="16dp"
+        tools:text="Пол"
+        />
+
+    <TextView
+        android:id="@+id/text_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/text_sex"
+        android:layout_margin="16dp"
+        tools:text="Возраст"
+        />
+
+    <TextView
+        android:id="@+id/text_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/text_age"
+        android:layout_margin="16dp"
+        tools:text="Стоимость"
+        />
+
+    <TextView
+        android:id="@+id/text_reasons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/text_price"
+        android:layout_margin="16dp"
+        tools:text="Поводы"
+        />
+
+</RelativeLayout>

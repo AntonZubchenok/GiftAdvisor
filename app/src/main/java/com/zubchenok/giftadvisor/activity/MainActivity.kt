@@ -1,26 +1,19 @@
-package com.zubchenok.giftadvisor
+package com.zubchenok.giftadvisor.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.SeekBar
-import com.zubchenok.giftadvisor.data.GiftListActivity
+import com.zubchenok.giftadvisor.*
 import com.zubchenok.giftadvisor.data.SEX_ANY
 import com.zubchenok.giftadvisor.data.SEX_FEMALE
 import com.zubchenok.giftadvisor.data.SEX_MALE
 import kotlinx.android.synthetic.main.activity_main.*
-
 class MainActivity : AppCompatActivity() {
 
-    //Age seekBar constants
     val AGE_MIN_VALUE = 10
     val AGE_MAX_VALUE = 100
     val AGE_DEFAULT_VALUE = 30
-
-    val EXTRA_SEX = "sex"
-    val EXTRA_REASON_SPINNER_POSITION = "reason spinner position"
-    val EXTRA_AGE = "age"
-    val EXTRA_MAX_PRICE = "max price"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +46,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
         })
-
-
     }
 
     private fun setButton() {
@@ -72,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             //get entered age from SeekBar
-            val age = seekbar_age.progress.toString().toInt()
+            val age = seekbar_age.progress
 
             //get entered max price from EditText
             var maxPrice = 0
@@ -82,10 +73,12 @@ class MainActivity : AppCompatActivity() {
 
             //Create and send Intent with data to GiftListActivity
             val intent = Intent(this, GiftListActivity().javaClass)
-            intent.putExtra(EXTRA_REASON_SPINNER_POSITION, reasonSpinnerPosition)
-            intent.putExtra(EXTRA_SEX, sex)
-            intent.putExtra(EXTRA_AGE, age)
-            intent.putExtra(EXTRA_MAX_PRICE, maxPrice)
+            with(intent) {
+                putExtra(EXTRA_REASON_SPINNER_POSITION, reasonSpinnerPosition)
+                putExtra(EXTRA_SEX, sex)
+                putExtra(EXTRA_AGE, age)
+                putExtra(EXTRA_MAX_PRICE, maxPrice)
+            }
             startActivity(intent)
         }
     }
