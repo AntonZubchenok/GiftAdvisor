@@ -7,16 +7,13 @@ import android.database.Cursor
 import android.net.Uri
 
 class GiftProvider : ContentProvider() {
+    val GIFTS = 100
+    val GIFT_ID = 101
+    val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
 
-    companion object {
-        val GIFTS = 100
-        val GIFT_ID = 101
-        val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
-
-        init {
-            uriMatcher.addURI(CONTENT_AUTHORITY, DB_NAME, GIFTS)
-            uriMatcher.addURI(CONTENT_AUTHORITY, DB_NAME + "/#", GIFT_ID)
-        }
+    init {
+        uriMatcher.addURI(CONTENT_AUTHORITY, DB_NAME, GIFTS)
+        uriMatcher.addURI(CONTENT_AUTHORITY, DB_NAME + "/#", GIFT_ID)
     }
 
     private lateinit var mDbHelper: GiftDbHelper
@@ -26,7 +23,8 @@ class GiftProvider : ContentProvider() {
         return true
     }
 
-    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor {
+    override fun query(uri: Uri, projection: Array<String>?, selection: String?,
+                       selectionArgs: Array<String>?, sortOrder: String?): Cursor {
         val database = mDbHelper.readableDatabase
         val cursor: Cursor
 
@@ -35,7 +33,7 @@ class GiftProvider : ContentProvider() {
                     selectionArgs, null, null, sortOrder)
 
             GIFT_ID -> {
-                val selection = _ID + "=?"
+                val selection = "$_ID=?"
                 cursor = database.query(TABLE_NAME, projection, selection,
                         selectionArgs, null, null, sortOrder)
             }

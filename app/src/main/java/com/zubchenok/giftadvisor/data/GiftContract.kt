@@ -5,13 +5,12 @@ import android.net.Uri
 
 //Database constants
 val CONTENT_AUTHORITY = "com.zubchenok.giftadvisor.data.gifts"
-val DB_URI: Uri = Uri.parse("content://" + CONTENT_AUTHORITY)
+val DB_URI: Uri = Uri.parse("content://$CONTENT_AUTHORITY")
 val DB_NAME = "gifts"
 val DB_PATH = "/data/data/com.zubchenok.giftadvisor/databases/"
 
-
 //Table constants
-val TABLE_URI = Uri.withAppendedPath(DB_URI, DB_NAME)
+val TABLE_URI: Uri = Uri.withAppendedPath(DB_URI, DB_NAME)
 val TABLE_NAME = "gifts"
 
 val _ID = "_id"                                            //INTEGER
@@ -30,13 +29,12 @@ val COLUMN_REASON_8_MAR = "reason_8_mar"                   //INTEGER
 val COLUMN_REASON_23_FEB = "reason_23_feb"                 //INTEGER
 val COLUMN_REASON_VALENTINES_DAY = "reason_valentines_day" //INTEGER
 
-val CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" +
-        CONTENT_AUTHORITY + "/" + DB_NAME
-val CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" +
-        CONTENT_AUTHORITY + "/" + DB_NAME
+//Content types
+val CONTENT_LIST_TYPE = "${ContentResolver.CURSOR_DIR_BASE_TYPE}/$CONTENT_AUTHORITY/$DB_NAME"
+val CONTENT_ITEM_TYPE = "${ContentResolver.CURSOR_ITEM_BASE_TYPE}/$CONTENT_AUTHORITY/$DB_NAME"
 
 //Sex constants
-val SEX_ANY = -1
 val SEX_MALE = 1
 val SEX_FEMALE = 0
+val SEX_ANY = -1
 

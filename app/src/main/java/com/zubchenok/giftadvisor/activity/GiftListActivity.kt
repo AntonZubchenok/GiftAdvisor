@@ -8,86 +8,79 @@ import android.database.Cursor
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import com.zubchenok.giftadvisor.*
 import com.zubchenok.giftadvisor.data.*
+import kotlinx.android.synthetic.main.activity_gift_list.*
 
 class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         GiftCursorRecyclerViewAdapter.OnItemClickListener {
 
-    lateinit var mAdapter: GiftCursorRecyclerViewAdapter
+    var mAdapter: GiftCursorRecyclerViewAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gift_list)
 
         val bundle = makeBundleFromIntent()
-
         loaderManager.restartLoader(0, bundle, this)
 
     }
 
     override fun onCreateLoader(id: Int, args: Bundle): Loader<Cursor> {
 
-        //Достаём данные из Bundle
+        //get data from Bundle
         val reasonSpinnerPosition = args.getInt(EXTRA_REASON_SPINNER_POSITION)
         val sex = args.getInt(EXTRA_SEX).toString()
         val age = args.getInt(EXTRA_AGE).toString()
         val maxPrice = args.getInt(EXTRA_MAX_PRICE).toString()
 
-        //Столбцы, которые нужно достать из БД
-        val projection = arrayOf<String>(_ID, COLUMN_NAME, COLUMN_IMAGE, COLUMN_PRICE_MIN, COLUMN_PRICE_MAX)
+        //Columns to get from database
+        val projection = arrayOf(_ID, COLUMN_NAME, COLUMN_IMAGE, COLUMN_PRICE_MIN, COLUMN_PRICE_MAX)
 
-        //Формирование SQL-запроса для того, чтобы достать из БД подарки, подходящие как
-        //для всех праздников, так и для нужного выбранного (reasonAny и reasonWedding например)
-        var reasonSelection = "reason_any=1"
-        when (reasonSpinnerPosition) {
-            SPINNER_POSITION_BIRTHDAY -> reasonSelection += " OR $COLUMN_REASON_BIRTHDAY=1"
-            SPINNER_POSITION_NEW_YEAR -> reasonSelection += " OR $COLUMN_REASON_NEW_YEAR=1"
-            SPINNER_POSITION_WEDDING -> reasonSelection += " OR $COLUMN_REASON_WEDDING=1"
-            SPINNER_POSITION_8_MAR -> reasonSelection += " OR $COLUMN_REASON_8_MAR=1"
-            SPINNER_POSITION_23_FEB -> reasonSelection += " OR $COLUMN_REASON_23_FEB=1"
-            SPINNER_POSITION_VALENTINES_DAY -> reasonSelection += " OR $COLUMN_REASON_VALENTINES_DAY=1"
-        }
+        //Selection by entered parameters (reason, age, sex, price)
+        val selection = makeSelection(reasonSpinnerPosition)
 
-        //Условия выборки данных из БД
-        val selection = "(" + COLUMN_SEX + "=? OR " + COLUMN_SEX + "=-1) AND " +
-                COLUMN_AGE_MAX + ">=? AND " +
-                COLUMN_AGE_MIN + "<=? AND " +
-                COLUMN_PRICE_MAX + "<=? AND " +
-                "(" + reasonSelection + ")"
-
-        //Значения условий выбора
+        //Values of selection arguments
         val selectionArgs = arrayOf(sex, age, age, maxPrice)
 
         return CursorLoader(this, TABLE_URI, projection, selection, selectionArgs, null)
     }
 
-    override fun onLoaderReset(loader: Loader<Cursor>?) {
-        this.mAdapter.swapCursor(null)
+    override fun onLoaderReset(loader: Loader<Cursor>) {
+        this.mAdapter?.swapCursor(null)
     }
 
-    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
+    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
 
-        //Ставим адаптер на RecyclerView
+        //Set Adapter on RecyclerView
         val mAdapter = GiftCursorRecyclerViewAdapter(this)
-        val recyclerView = findViewById(R.id.recyclerview_gift_list) as RecyclerView
-        recyclerView.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = mAdapter
+        with(recyclerview_gift_list) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
 
         mAdapter.swapCursor(data)
     }
 
+    override fun onItemClicked(cursor: Cursor) {
+
+        //Get gift id from cursor
+        val giftId = cursor.getInt(cursor.getColumnIndex(_ID))
+
+        //Put gift id into Intent and send it to ItemActivity
+        with(Intent(this, ItemActivity::class.java)) {
+            putExtra(_ID, giftId)
+            startActivity(this)
+        }
+    }
+
     /*The method extracts entered in MainActivity data from Intent and puts is into
-      bundle that will be sent into Loader*/
+     bundle that will be sent into Loader*/
     private fun makeBundleFromIntent(): Bundle {
         val bundle = Bundle()
         with(bundle) {
-            putInt(
-                    EXTRA_REASON_SPINNER_POSITION,
-                    intent.getIntExtra(EXTRA_REASON_SPINNER_POSITION, -1))
+            putInt(EXTRA_REASON_SPINNER_POSITION, intent.getIntExtra(EXTRA_REASON_SPINNER_POSITION, -1))
             putInt(EXTRA_SEX, intent.getIntExtra(EXTRA_SEX, -2))
             putInt(EXTRA_AGE, intent.getIntExtra(EXTRA_AGE, -1))
             putInt(EXTRA_MAX_PRICE, intent.getIntExtra(EXTRA_MAX_PRICE, -1))
@@ -95,14 +88,25 @@ class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
         return bundle
     }
 
-    override fun onItemClicked(cursor: Cursor) {
-        //Считываем с курсора id подарка
-        val giftId = cursor.getInt(cursor.getColumnIndex(_ID))
+    private fun makeSelection(reasonSpinnerPosition: Int): String {
 
-        //помещаем id в интент и отправляем в ItemActivity
-        val intent = Intent(this, ItemActivity::class.java)
-        intent.putExtra(_ID, giftId)
-        startActivity(intent)
+        /*Selection by reason. It gets gifts both for any reason and for selected
+       reason (reasonAny and reasonWedding for example).*/
+        val reasonSelection = when (reasonSpinnerPosition) {
+            SPINNER_POSITION_BIRTHDAY -> "reason_any=1 OR $COLUMN_REASON_BIRTHDAY=1"
+            SPINNER_POSITION_NEW_YEAR -> "reason_any=1 OR $COLUMN_REASON_NEW_YEAR=1"
+            SPINNER_POSITION_WEDDING -> "reason_any=1 OR $COLUMN_REASON_WEDDING=1"
+            SPINNER_POSITION_8_MAR -> "reason_any=1 OR $COLUMN_REASON_8_MAR=1"
+            SPINNER_POSITION_23_FEB -> "reason_any=1 OR $COLUMN_REASON_23_FEB=1"
+            SPINNER_POSITION_VALENTINES_DAY -> "reason_any=1 OR $COLUMN_REASON_VALENTINES_DAY=1"
+            else -> "reason_any=1"
+        }
+
+        //Selection by entered reason, sex, age and price
+        val selection = "($COLUMN_SEX=? OR $COLUMN_SEX=-1) AND $COLUMN_AGE_MAX>=? AND " +
+                "$COLUMN_AGE_MIN<=? AND $COLUMN_PRICE_MAX<=? AND($reasonSelection)"
+
+        return selection
     }
 
 }

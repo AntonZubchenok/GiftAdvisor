@@ -9,6 +9,7 @@ import com.zubchenok.giftadvisor.data.SEX_ANY
 import com.zubchenok.giftadvisor.data.SEX_FEMALE
 import com.zubchenok.giftadvisor.data.SEX_MALE
 import kotlinx.android.synthetic.main.activity_main.*
+
 class MainActivity : AppCompatActivity() {
 
     val AGE_MIN_VALUE = 10
@@ -18,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         setSeekBar()
         setButton()
     }
@@ -48,8 +48,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    /* The method sets OnClickListener to the Button which reads input data from UI, puts it into
+    * intent and sends it to GiftListActivity*/
     private fun setButton() {
-
         button_find.setOnClickListener {
 
             //get selected Spinner item position
@@ -72,14 +73,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             //Create and send Intent with data to GiftListActivity
-            val intent = Intent(this, GiftListActivity().javaClass)
-            with(intent) {
+            with(Intent(this, GiftListActivity().javaClass)) {
                 putExtra(EXTRA_REASON_SPINNER_POSITION, reasonSpinnerPosition)
                 putExtra(EXTRA_SEX, sex)
                 putExtra(EXTRA_AGE, age)
                 putExtra(EXTRA_MAX_PRICE, maxPrice)
+                startActivity(this)
             }
-            startActivity(intent)
         }
     }
 }
