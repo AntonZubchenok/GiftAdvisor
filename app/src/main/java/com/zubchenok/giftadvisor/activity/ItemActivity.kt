@@ -45,6 +45,7 @@ class ItemActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         //Show gift name
         text_item_name.text = with(data) { getString(getColumnIndex(COLUMN_NAME)) }
 
+        //TODO любому тексту, который выводится, место в ресурсах
         //Set sex to which the gift fits
         var sex = when (with(data) { getInt(getColumnIndex(COLUMN_SEX)) }) {
             0 -> "женский"
@@ -53,7 +54,7 @@ class ItemActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
             else -> ""
         }
 
-        text_sex.text = "Пол: $sex"
+        text_sex.text = "Пол: $sex" //TODO форматирование тоже можно в ресурсах делать
 
         //Show min and max age
         val ageMin = with(data) { getInt(getColumnIndex(COLUMN_AGE_MIN)) }

@@ -51,12 +51,13 @@ class MainActivity : AppCompatActivity() {
     /* The method sets OnClickListener to the Button which reads input data from UI, puts it into
     * intent and sends it to GiftListActivity*/
     private fun setButton() {
+        //TODO лямбды это хорошо, но только если не писать в них весь код. Вынеси код в отдельный метод и вызывай его в лямбде.
         button_find.setOnClickListener {
 
             //get selected Spinner item position
             val reasonSpinnerPosition = spinner_holidays.selectedItemPosition
 
-            //get selected RadioButton
+            //get selected RadioButton TODO тоже можно отдельно сделать
             val sex = when (radiogroup_sex.checkedRadioButtonId) {
                 R.id.radiobutton_male -> SEX_MALE
                 R.id.radiobutton_female -> SEX_FEMALE
@@ -66,12 +67,13 @@ class MainActivity : AppCompatActivity() {
             //get entered age from SeekBar
             val age = seekbar_age.progress
 
+            //TODO давай это упростим через расширения классов как в приложении с лямбдой я вынес фильтрацию массива, по моему готовый блок - пулучение числа из эдиттекста
             //get entered max price from EditText
             var maxPrice = 0
             if (!edittext_price.text.isEmpty()) {
                 maxPrice = edittext_price.text.toString().toInt()
             }
-
+            //TODO это тоже отдельным методом вынести, старайся декомпозировать большие куски кода по их задачам
             //Create and send Intent with data to GiftListActivity
             with(Intent(this, GiftListActivity().javaClass)) {
                 putExtra(EXTRA_REASON_SPINNER_POSITION, reasonSpinnerPosition)

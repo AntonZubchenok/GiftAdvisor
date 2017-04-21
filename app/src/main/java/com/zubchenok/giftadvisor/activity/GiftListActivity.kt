@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_gift_list.*
 class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         GiftCursorRecyclerViewAdapter.OnItemClickListener {
 
+    //TODO тут можно лэйтинит, старайся избегать этих знаков вопроса
     var mAdapter: GiftCursorRecyclerViewAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +53,7 @@ class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
 
+        //TODO вот тут что-то странное, let в помощь, и почему это не глобальный адаптер, он нигде не записывается, в вверху вызывается, но так как он нул ничего не отрабатывает
         //Set Adapter on RecyclerView
         val mAdapter = GiftCursorRecyclerViewAdapter(this)
         with(recyclerview_gift_list) {
@@ -92,6 +94,7 @@ class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
 
         /*Selection by reason. It gets gifts both for any reason and for selected
        reason (reasonAny and reasonWedding for example).*/
+        //TODO reason_any в константы
         val reasonSelection = when (reasonSpinnerPosition) {
             SPINNER_POSITION_BIRTHDAY -> "reason_any=1 OR $COLUMN_REASON_BIRTHDAY=1"
             SPINNER_POSITION_NEW_YEAR -> "reason_any=1 OR $COLUMN_REASON_NEW_YEAR=1"

@@ -9,7 +9,7 @@ import android.net.Uri
 class GiftProvider : ContentProvider() {
     val GIFTS = 100
     val GIFT_ID = 101
-    val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
+    val uriMatcher = UriMatcher(UriMatcher.NO_MATCH) //TODO если в ините у тебя один только этот класс, сделай инициализацию через apply
 
     init {
         uriMatcher.addURI(CONTENT_AUTHORITY, DB_NAME, GIFTS)
