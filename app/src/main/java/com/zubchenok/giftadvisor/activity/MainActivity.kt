@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSeekBar()
-        setButton()
+        setButtonListener()
     }
 
     /* The method sets min, max and default values for the age SeekBar and maps SeekBar progress on
@@ -50,38 +50,40 @@ class MainActivity : AppCompatActivity() {
 
     /* The method sets OnClickListener to the Button which reads input data from UI, puts it into
     * intent and sends it to GiftListActivity*/
-    private fun setButton() {
-        //TODO лямбды это хорошо, но только если не писать в них весь код. Вынеси код в отдельный метод и вызывай его в лямбде.
-        button_find.setOnClickListener {
+    private fun setButtonListener() {
+        button_find.setOnClickListener { sendIntent() }
+    }
 
-            //get selected Spinner item position
-            val reasonSpinnerPosition = spinner_holidays.selectedItemPosition
+    private fun getSexConstant(): Int {
+        return when (radiogroup_sex.checkedRadioButtonId) {
+            R.id.radiobutton_male -> SEX_MALE
+            R.id.radiobutton_female -> SEX_FEMALE
+            else -> SEX_ANY
+        }
+    }
 
-            //get selected RadioButton TODO тоже можно отдельно сделать
-            val sex = when (radiogroup_sex.checkedRadioButtonId) {
-                R.id.radiobutton_male -> SEX_MALE
-                R.id.radiobutton_female -> SEX_FEMALE
-                else -> SEX_ANY
-            }
+    private fun sendIntent() {
 
-            //get entered age from SeekBar
-            val age = seekbar_age.progress
+        //get selected Spinner item position
+        val reasonSpinnerPosition = spinner_holidays.selectedItemPosition
 
-            //TODO давай это упростим через расширения классов как в приложении с лямбдой я вынес фильтрацию массива, по моему готовый блок - пулучение числа из эдиттекста
-            //get entered max price from EditText
-            var maxPrice = 0
-            if (!edittext_price.text.isEmpty()) {
-                maxPrice = edittext_price.text.toString().toInt()
-            }
-            //TODO это тоже отдельным методом вынести, старайся декомпозировать большие куски кода по их задачам
-            //Create and send Intent with data to GiftListActivity
-            with(Intent(this, GiftListActivity().javaClass)) {
-                putExtra(EXTRA_REASON_SPINNER_POSITION, reasonSpinnerPosition)
-                putExtra(EXTRA_SEX, sex)
-                putExtra(EXTRA_AGE, age)
-                putExtra(EXTRA_MAX_PRICE, maxPrice)
-                startActivity(this)
-            }
+        //get sex constant from selected RadioButton
+        val sex = getSexConstant()
+
+        //get entered age from SeekBar
+        val age = seekbar_age.progress
+
+        //get entered max price from EditText
+        val maxPrice = with(edittext_price) { getIntValue(this) }
+
+        with(Intent(this, GiftListActivity().javaClass)) {
+            putExtra(EXTRA_REASON_SPINNER_POSITION, reasonSpinnerPosition)
+            putExtra(EXTRA_SEX, sex)
+            putExtra(EXTRA_AGE, age)
+            putExtra(EXTRA_MAX_PRICE, maxPrice)
+            startActivity(this)
         }
     }
 }
+
+

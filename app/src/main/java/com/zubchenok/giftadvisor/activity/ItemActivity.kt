@@ -68,48 +68,43 @@ class ItemActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
 
         //Show reasons to which the gift fits
         var reasons = ""
-
-        if (data.getInt(data.getColumnIndex(COLUMN_REASON_ANY)) == 1) {
-            reasons = "любой"
-        } else {
-            if (data.getInt(data.getColumnIndex(COLUMN_REASON_23_FEB)) == 1) {
-                reasons += "23 февраля"
-            }
-            if (data.getInt(data.getColumnIndex(COLUMN_REASON_8_MAR)) == 1) {
-                if (!reasons.isEmpty()) {
-                    reasons += ", "
+        with(data) {
+            if (getInt(getColumnIndex(COLUMN_REASON_ANY)) == 1) {
+                reasons = "любой"
+            } else {
+                if (getInt(getColumnIndex(COLUMN_REASON_23_FEB)) == 1) {
+                    reasons += "23 февраля"
                 }
-                reasons += "8 марта"
-            }
-            if (data.getInt(data.getColumnIndex(COLUMN_REASON_BIRTHDAY)) == 1) {
-                if (!reasons.isEmpty()) {
-                    reasons += ", "
+                if (getInt(getColumnIndex(COLUMN_REASON_8_MAR)) == 1) {
+                    reasons += "8 марта"
                 }
-                reasons += "день рождения"
-            }
-            if (data.getInt(data.getColumnIndex(COLUMN_REASON_NEW_YEAR)) == 1) {
-                if (!reasons.isEmpty()) {
-                    reasons += ", "
+                if (getInt(getColumnIndex(COLUMN_REASON_BIRTHDAY)) == 1) {
+                    if (!reasons.isEmpty()) {
+                        reasons += ", "
+                    }
+                    reasons += "день рождения"
                 }
-                reasons += "Новый Год"
-            }
-            if (data.getInt(data.getColumnIndex(COLUMN_REASON_VALENTINES_DAY)) == 1) {
-                if (!reasons.isEmpty()) {
-                    reasons += ", "
+                if (getInt(getColumnIndex(COLUMN_REASON_NEW_YEAR)) == 1) {
+                    if (!reasons.isEmpty()) {
+                        reasons += ", "
+                    }
+                    reasons += "Новый Год"
                 }
-                reasons += "день Святого Валентина"
-            }
-            if (data.getInt(data.getColumnIndex(COLUMN_REASON_WEDDING)) == 1) {
-                if (!reasons.isEmpty()) {
-                    reasons += ", "
+                if (getInt(getColumnIndex(COLUMN_REASON_VALENTINES_DAY)) == 1) {
+                    if (!reasons.isEmpty()) {
+                        reasons += ", "
+                    }
+                    reasons += "день Святого Валентина"
                 }
-                reasons += "свадьба"
+                if (getInt(getColumnIndex(COLUMN_REASON_WEDDING)) == 1) {
+                    if (!reasons.isEmpty()) {
+                        reasons += ", "
+                    }
+                    reasons += "свадьба"
+                }
             }
+            text_reasons.text = "Повод: " + reasons
         }
-        text_reasons.text = "Повод: " + reasons
-
-
-
 
     }
 
