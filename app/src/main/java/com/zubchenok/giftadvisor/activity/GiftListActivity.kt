@@ -15,8 +15,7 @@ import kotlinx.android.synthetic.main.activity_gift_list.*
 class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         GiftCursorRecyclerViewAdapter.OnItemClickListener {
 
-    //TODO тут можно лэйтинит, старайся избегать этих знаков вопроса
-    var mAdapter: GiftCursorRecyclerViewAdapter? = null
+    lateinit var mAdapter: GiftCursorRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,21 +47,11 @@ class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>) {
-        this.mAdapter?.swapCursor(null)
+        this.mAdapter.swapCursor(null)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor) {
-
-        //TODO вот тут что-то странное, let в помощь, и почему это не глобальный адаптер, он нигде не записывается, в вверху вызывается, но так как он нул ничего не отрабатывает
-        //Set Adapter on RecyclerView
-        val mAdapter = GiftCursorRecyclerViewAdapter(this)
-        with(recyclerview_gift_list) {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = mAdapter
-        }
-
-        mAdapter.swapCursor(data)
+        setRecyclerViewAdapter(data)
     }
 
     override fun onItemClicked(cursor: Cursor) {
@@ -94,15 +83,14 @@ class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
 
         /*Selection by reason. It gets gifts both for any reason and for selected
        reason (reasonAny and reasonWedding for example).*/
-        //TODO reason_any в константы
         val reasonSelection = when (reasonSpinnerPosition) {
-            SPINNER_POSITION_BIRTHDAY -> "reason_any=1 OR $COLUMN_REASON_BIRTHDAY=1"
-            SPINNER_POSITION_NEW_YEAR -> "reason_any=1 OR $COLUMN_REASON_NEW_YEAR=1"
-            SPINNER_POSITION_WEDDING -> "reason_any=1 OR $COLUMN_REASON_WEDDING=1"
-            SPINNER_POSITION_8_MAR -> "reason_any=1 OR $COLUMN_REASON_8_MAR=1"
-            SPINNER_POSITION_23_FEB -> "reason_any=1 OR $COLUMN_REASON_23_FEB=1"
-            SPINNER_POSITION_VALENTINES_DAY -> "reason_any=1 OR $COLUMN_REASON_VALENTINES_DAY=1"
-            else -> "reason_any=1"
+            SPINNER_POSITION_BIRTHDAY -> "$COLUMN_REASON_ANY=1 OR $COLUMN_REASON_BIRTHDAY=1"
+            SPINNER_POSITION_NEW_YEAR -> "$COLUMN_REASON_ANY=1 OR $COLUMN_REASON_NEW_YEAR=1"
+            SPINNER_POSITION_WEDDING -> "$COLUMN_REASON_ANY=1 OR $COLUMN_REASON_WEDDING=1"
+            SPINNER_POSITION_8_MAR -> "$COLUMN_REASON_ANY=1 OR $COLUMN_REASON_8_MAR=1"
+            SPINNER_POSITION_23_FEB -> "$COLUMN_REASON_ANY=1 OR $COLUMN_REASON_23_FEB=1"
+            SPINNER_POSITION_VALENTINES_DAY -> "$COLUMN_REASON_ANY=1 OR $COLUMN_REASON_VALENTINES_DAY=1"
+            else -> "$COLUMN_REASON_ANY=1"
         }
 
         //Selection by entered reason, sex, age and price
@@ -112,4 +100,13 @@ class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
         return selection
     }
 
+    private fun setRecyclerViewAdapter(data: Cursor) {
+        mAdapter = GiftCursorRecyclerViewAdapter(this)
+        with(recyclerview_gift_list) {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
+        mAdapter.swapCursor(data)
+    }
 }

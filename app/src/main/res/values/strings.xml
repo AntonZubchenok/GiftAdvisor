@@ -18,4 +18,22 @@
     <string name="under">до</string>
     <string name="BYN">BYN</string>
     <string name="find">Подобрать</string>
+
+    <!--GiftListActivity-->
+    <string name="text_reason">Повод: </string>
+    <string name="reason_any">любой</string>
+    <string name="reason_23_feb">23 февраля</string>
+    <string name="reason_8_mar">8 марта</string>
+    <string name="reason_birthday">день рождения</string>
+    <string name="reason_new_year">Новый Год</string>
+    <string name="reason_valentines_day">день Святого Валентин</string>
+    <string name="reason_wedding">свадьба</string>
+    <string name="sex_male">мужской</string>
+    <string name="sex_female">женский</string>
+    <string name="sex_any">любой</string>
+    <string name="gift_list_activity_sex">Пол: %1$s</string>
+    <string name="gift_list_activity_age">Возраст: %1$d-%2$d лет</string>
+    <string name="gift_list_activity_price">Стоимость: %1$d-%2$d BYN</string>
+    <string name="gift_list_activity_reason">Повод: %1$s</string>
+
 </resources>

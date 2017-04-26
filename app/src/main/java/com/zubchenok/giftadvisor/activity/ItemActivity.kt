@@ -6,6 +6,7 @@ import android.content.Loader
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.zubchenok.giftadvisor.COMMA
 import com.zubchenok.giftadvisor.R
 import com.zubchenok.giftadvisor.data.*
 import kotlinx.android.synthetic.main.activity_item.*
@@ -45,67 +46,65 @@ class ItemActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         //Show gift name
         text_item_name.text = with(data) { getString(getColumnIndex(COLUMN_NAME)) }
 
-        //TODO любому тексту, который выводится, место в ресурсах
         //Set sex to which the gift fits
-        var sex = when (with(data) { getInt(getColumnIndex(COLUMN_SEX)) }) {
-            0 -> "женский"
-            1 -> "мужской"
-            -1 -> "любой"
+        val sex = when (with(data) { getInt(getColumnIndex(COLUMN_SEX)) }) {
+            0 -> resources.getString(R.string.sex_female)
+            1 -> resources.getString(R.string.sex_male)
+            -1 -> resources.getString(R.string.sex_any)
             else -> ""
         }
 
-        text_sex.text = "Пол: $sex" //TODO форматирование тоже можно в ресурсах делать
+        text_sex.text = getString(R.string.gift_list_activity_sex, sex)
 
         //Show min and max age
         val ageMin = with(data) { getInt(getColumnIndex(COLUMN_AGE_MIN)) }
         val ageMax = with(data) { getInt(getColumnIndex(COLUMN_AGE_MAX)) }
-        text_age.text = "Возраст: $ageMin-$ageMax лет"
+        text_age.text = getString(R.string.gift_list_activity_age, ageMin, ageMax)
 
         //Show min and max price
         val priceMin = with(data) { getInt(getColumnIndex(COLUMN_PRICE_MIN)) }
         val priceMax = with(data) { getInt(getColumnIndex(COLUMN_PRICE_MAX)) }
-        text_price.text = "Стоимость: $priceMin-$priceMax BYN"
+        text_price.text = getString(R.string.gift_list_activity_price, priceMin, priceMax)
 
         //Show reasons to which the gift fits
         var reasons = ""
         with(data) {
             if (getInt(getColumnIndex(COLUMN_REASON_ANY)) == 1) {
-                reasons = "любой"
+                reasons = resources.getString(R.string.reason_any)
             } else {
                 if (getInt(getColumnIndex(COLUMN_REASON_23_FEB)) == 1) {
-                    reasons += "23 февраля"
+                    reasons += resources.getString(R.string.reason_23_feb)
                 }
                 if (getInt(getColumnIndex(COLUMN_REASON_8_MAR)) == 1) {
-                    reasons += "8 марта"
+                    reasons += resources.getString(R.string.reason_8_mar)
                 }
                 if (getInt(getColumnIndex(COLUMN_REASON_BIRTHDAY)) == 1) {
                     if (!reasons.isEmpty()) {
-                        reasons += ", "
+                        reasons += COMMA
                     }
-                    reasons += "день рождения"
+                    reasons += resources.getString(R.string.reason_birthday)
                 }
                 if (getInt(getColumnIndex(COLUMN_REASON_NEW_YEAR)) == 1) {
                     if (!reasons.isEmpty()) {
-                        reasons += ", "
+                        reasons += COMMA
                     }
-                    reasons += "Новый Год"
+                    reasons += resources.getString(R.string.reason_new_year)
                 }
                 if (getInt(getColumnIndex(COLUMN_REASON_VALENTINES_DAY)) == 1) {
                     if (!reasons.isEmpty()) {
-                        reasons += ", "
+                        reasons += COMMA
                     }
-                    reasons += "день Святого Валентина"
+                    reasons += resources.getString(R.string.reason_valentines_day)
                 }
                 if (getInt(getColumnIndex(COLUMN_REASON_WEDDING)) == 1) {
                     if (!reasons.isEmpty()) {
-                        reasons += ", "
+                        reasons += COMMA
                     }
-                    reasons += "свадьба"
+                    reasons += resources.getString(R.string.reason_wedding)
                 }
             }
-            text_reasons.text = "Повод: " + reasons
+            text_reasons.text = resources.getString(R.string.gift_list_activity_reason, reasons)
         }
-
     }
 
     override fun onLoaderReset(loader: Loader<Cursor>?) {}
