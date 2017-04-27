@@ -32,6 +32,8 @@ dependencies {
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
     compile 'com.android.support:recyclerview-v7:25.0.1'
     testCompile 'junit:junit:4.12'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.2.10'
 }
 repositories {
     mavenCentral()

@@ -9,6 +9,7 @@ import com.zubchenok.giftadvisor.data.SEX_ANY
 import com.zubchenok.giftadvisor.data.SEX_FEMALE
 import com.zubchenok.giftadvisor.data.SEX_MALE
 import kotlinx.android.synthetic.main.activity_main.*
+import rx.subjects.PublishSubject
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,7 +52,12 @@ class MainActivity : AppCompatActivity() {
     /* The method sets OnClickListener to the Button which reads input data from UI, puts it into
     * intent and sends it to GiftListActivity*/
     private fun setButtonListener() {
-        button_find.setOnClickListener { sendIntent() }
+        with(PublishSubject.create<Boolean>()) {
+            subscribe { sendIntent() }
+            button_find.setOnClickListener({
+                onNext(true)
+            })
+        }
     }
 
     private fun getSexConstant(): Int {
