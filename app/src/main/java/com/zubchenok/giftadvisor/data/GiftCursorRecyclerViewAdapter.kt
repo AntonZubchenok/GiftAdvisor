@@ -21,7 +21,6 @@ class GiftCursorRecyclerViewAdapter(val listener: OnItemClickListener) :
     }
 
     class GiftViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         fun bindData(cursor: Cursor, listener: OnItemClickListener): View = itemView.apply {
             text_gift_name.text = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
             val imageName = cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE))
