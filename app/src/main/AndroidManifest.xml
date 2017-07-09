@@ -11,14 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.GiftListActivity">
+        <activity android:name=".activities.GiftListActivity">
         </activity>
 
         <provider
@@ -26,7 +26,7 @@
             android:authorities="com.zubchenok.giftadvisor.data.gifts"
             android:exported="false"/>
 
-        <activity android:name=".activity.ItemActivity">
+        <activity android:name=".activities.ItemActivity">
         </activity>
     </application>
 

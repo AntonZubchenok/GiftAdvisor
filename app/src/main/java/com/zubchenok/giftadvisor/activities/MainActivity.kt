@@ -1,4 +1,4 @@
-package com.zubchenok.giftadvisor.activity
+package com.zubchenok.giftadvisor.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,13 +13,14 @@ import rx.subjects.PublishSubject
 
 class MainActivity : AppCompatActivity() {
 
-    val AGE_MIN_VALUE = 10
-    val AGE_MAX_VALUE = 100
-    val AGE_DEFAULT_VALUE = 30
+    private val AGE_MIN_VALUE = 10
+    private val AGE_MAX_VALUE = 100
+    private val AGE_DEFAULT_VALUE = 30
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         setSeekBar()
         setButtonListener()
     }

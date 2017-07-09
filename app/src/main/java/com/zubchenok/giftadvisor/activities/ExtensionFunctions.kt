@@ -1,4 +1,4 @@
-package com.zubchenok.giftadvisor.activity
+package com.zubchenok.giftadvisor.activities
 
 import android.widget.EditText
 

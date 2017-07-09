@@ -1,4 +1,4 @@
-package com.zubchenok.giftadvisor.activity
+package com.zubchenok.giftadvisor.activities
 
 import android.app.LoaderManager
 import android.content.CursorLoader

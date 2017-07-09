@@ -1,16 +1,22 @@
-package com.zubchenok.giftadvisor.activity
+package com.zubchenok.giftadvisor.activities
 
 import android.app.LoaderManager
 import android.content.CursorLoader
 import android.content.Intent
 import android.content.Loader
 import android.database.Cursor
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.DefaultItemAnimator
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
+import android.view.View
 import com.zubchenok.giftadvisor.*
 import com.zubchenok.giftadvisor.data.*
 import kotlinx.android.synthetic.main.activity_gift_list.*
+
 
 class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>,
         GiftCursorRecyclerViewAdapter.OnItemClickListener {
@@ -104,9 +110,47 @@ class GiftListActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Curs
         mAdapter = GiftCursorRecyclerViewAdapter(this)
         with(recyclerview_gift_list) {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(this@GiftListActivity, 2)
+            addItemDecoration(GridSpacingItemDecoration(2, dpToPx(10), true))
+            itemAnimator = DefaultItemAnimator()
             adapter = mAdapter
         }
         mAdapter.swapCursor(data)
+    }
+
+    /**
+     * Converting dp to pixel
+     */
+    private fun dpToPx(dp: Int): Int {
+        val r = resources
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), r.displayMetrics))
+    }
+
+    /**
+     * RecyclerView item decoration - give equal margin around grid item
+     */
+    inner class GridSpacingItemDecoration(private val spanCount: Int, private val spacing: Int, private val includeEdge: Boolean) : RecyclerView.ItemDecoration() {
+
+        @Override
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            val position = parent.getChildAdapterPosition(view) // item position
+            val column = position % spanCount // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing
+                }
+                outRect.bottom = spacing // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing // item top
+                }
+            }
+        }
     }
 }
